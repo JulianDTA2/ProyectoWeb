@@ -1,0 +1,64 @@
+import { defineStore } from 'pinia'
+import axios from 'axios'
+import { useAuthStore } from './auth' 
+
+const api = axios.create({
+  baseURL: 'http://localhost:3000',
+})
+
+api.interceptors.request.use((config) => {
+  const authStore = useAuthStore()
+  if (authStore.token) {
+    config.headers.Authorization = `Bearer ${authStore.token}`
+  }
+  return config
+})
+
+export const useToolsStore = defineStore('tools', {
+  state: () => ({
+    tools: [] as any[],
+    error: null as string | null,
+    successMessage: null as string | null,
+  }),
+
+  actions: {
+    async fetchTools() {
+      this.error = null
+      try {
+        const response = await api.get('/tools')
+        this.tools = response.data
+        return true
+      } catch (e: any) {
+        this.error = e.response?.data?.message || 'Error al cargar herramientas'
+        return false
+      }
+    },
+
+    async createTool(data: { name: string; description: string; category: string }) {
+      this.error = null
+      this.successMessage = null
+      try {
+        const response = await api.post('/tools', data)
+        this.tools.push(response.data)
+        this.successMessage = 'Herramienta creada con éxito.'
+        return true
+      } catch (e: any) {
+        this.error = e.response?.data?.message || 'Error al crear la herramienta'
+        return false
+      }
+    },
+
+    async requestLoan(data: { toolId: string; startDate: string; endDate: string }) {
+      this.error = null
+      this.successMessage = null
+      try {
+        await api.post('/loans', data)
+        this.successMessage = '¡Solicitud enviada con éxito!'
+        return true
+      } catch (e: any) {
+        this.error = e.response?.data?.message || 'Error al enviar la solicitud'
+        return false
+      }
+    },
+  },
+})
