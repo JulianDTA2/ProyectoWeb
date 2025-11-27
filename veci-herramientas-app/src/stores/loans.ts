@@ -54,6 +54,15 @@ export const useLoansStore = defineStore('loans', {
         this.error = 'Error al actualizar el estado'
         return false
       }
-    }
+    },
+    async submitReview(data: { loanId: string; rating: number; comment: string }) {
+      try {
+        await api.post('/reviews', data)
+        return true
+      } catch (e: any) {
+        this.error = e.response?.data?.message || 'Error al enviar reseña'
+        return false
+      }
+    },
   }
 })
