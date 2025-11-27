@@ -13,5 +13,6 @@ import { ToolsModule } from '../tools/tools.module';
   ],
   controllers: [LoansController],
   providers: [LoansService],
+  exports: [LoansService]
 })
 export class LoansModule {}

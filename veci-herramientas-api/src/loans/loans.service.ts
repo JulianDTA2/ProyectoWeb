@@ -44,6 +44,10 @@ export class LoansService {
     });
   }
 
+  async findOne(id: string): Promise<Loan | null> {
+    return this.loanRepository.findOneBy({ id });
+  }
+
   async updateStatus(
     id: string, 
     updateLoanStatusDto: UpdateLoanStatusDto, 
