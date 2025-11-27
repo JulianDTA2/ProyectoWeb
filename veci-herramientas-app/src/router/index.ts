@@ -4,6 +4,7 @@ import HomeView from './../views/HomeView.vue'
 import LoginView from './../views/LoginView.vue'
 import DashboardView from './../views/DashboardView.vue' 
 import ToolsView from './../views/ToolsView.vue'
+import MyLoansView from '../views/MyLoansView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,12 @@ const router = createRouter({
       path: '/tools',
       name: 'tools',
       component: ToolsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/my-loans',
+      name: 'my-loans',
+      component: MyLoansView,
       meta: { requiresAuth: true },
     },
   ],

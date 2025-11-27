@@ -16,6 +16,13 @@ const authStore = useAuthStore()
     >
       Ver Catálogo de Herramientas
     </RouterLink>
+    
+    <RouterLink
+      to="/my-loans"
+      class="mt-6 ml-4 inline-block rounded-md bg-purple-500 px-4 py-2 text-white hover:bg-purple-600"
+    >
+      Mis Préstamos
+    </RouterLink>
 
     <br />
 
