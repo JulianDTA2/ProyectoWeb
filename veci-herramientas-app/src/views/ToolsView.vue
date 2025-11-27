@@ -4,12 +4,10 @@ import { useToolsStore } from '@/stores/tools'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 
-// --- INICIALIZACIÓN ---
 const toolsStore = useToolsStore()
 const authStore = useAuthStore()
 const router = useRouter()
 
-// --- ESTADO DEL FORMULARIO (Crear) ---
 const newTool = ref({
   name: '',
   description: '',
@@ -17,7 +15,6 @@ const newTool = ref({
 })
 const isCreating = ref(false)
 
-// --- ESTADO DEL MODAL (Solicitar) ---
 const showModal = ref(false)
 const selectedTool = ref<any>(null)
 const loanDates = ref({
@@ -26,10 +23,8 @@ const loanDates = ref({
 })
 const isRequesting = ref(false)
 
-// --- ACCIONES ---
 onMounted(() => {
   toolsStore.fetchTools()
-  // Si auth.user está vacío, fetchProfile() se llama desde App.vue
 })
 
 const handleSubmitTool = async () => {
@@ -42,7 +37,6 @@ const handleSubmitTool = async () => {
   isCreating.value = false
 }
 
-// --- Acciones del Modal ---
 const openRequestModal = (tool: any) => {
   selectedTool.value = tool
   loanDates.value = { startDate: '', endDate: '' }
@@ -74,43 +68,28 @@ const handleRequestLoan = async () => {
 <template>
   <div class="min-h-screen bg-gray-100 p-8">
     <div class="mx-auto max-w-4xl">
-      <button
-        @click="router.push({ name: 'dashboard' })"
-        class="mb-4 text-sm text-blue-600 hover:underline"
-      >
+      <button @click="router.push({ name: 'dashboard' })" class="mb-4 text-sm text-blue-600 hover:underline">
         &larr; Volver al Dashboard
       </button>
 
       <h1 class="mb-6 text-3xl font-bold">Catálogo de Herramientas</h1>
 
-      <form
-        @submit.prevent="handleSubmitTool"
-        class="mb-8 rounded-lg bg-white p-6 shadow-md"
-      >
+      <form @submit.prevent="handleSubmitTool" class="mb-8 rounded-lg bg-white p-6 shadow-md">
         <h2 class="mb-4 text-2xl font-semibold">Prestar una Herramienta</h2>
 
-        <div
-          v-if="toolsStore.error && isCreating"
-          class="mb-4 rounded-md bg-red-100 p-3 text-center text-sm text-red-700"
-        >
+        <div v-if="toolsStore.error && isCreating"
+          class="mb-4 rounded-md bg-red-100 p-3 text-center text-sm text-red-700">
           {{ toolsStore.error }}
         </div>
-         <div
-          v-if="toolsStore.successMessage && isCreating"
-          class="mb-4 rounded-md bg-green-100 p-3 text-center text-sm text-green-700"
-        >
+        <div v-if="toolsStore.successMessage && isCreating"
+          class="mb-4 rounded-md bg-green-100 p-3 text-center text-sm text-green-700">
           {{ toolsStore.successMessage }}
         </div>
 
         <div class="mb-4">
           <label for="name" class="mb-2 block font-medium">Nombre</label>
-          <input
-            type="text"
-            v-model="newTool.name"
-            class="w-full rounded-md border p-3"
-            placeholder="Ej. Taladro Percutor"
-            required
-          />
+          <input type="text" v-model="newTool.name" class="w-full rounded-md border p-3"
+            placeholder="Ej. Taladro Percutor" required />
         </div>
 
         <div class="mb-4">
@@ -126,19 +105,13 @@ const handleRequestLoan = async () => {
 
         <div class="mb-4">
           <label for="description" class="mb-2 block font-medium">Descripción</label>
-          <textarea
-            v-model="newTool.description"
-            class="w-full rounded-md border p-3"
-            placeholder="Ej. Poco uso, viene con set de brocas."
-          ></textarea>
+          <textarea v-model="newTool.description" class="w-full rounded-md border p-3"
+            placeholder="Ej. Poco uso, viene con set de brocas."></textarea>
         </div>
 
-        <button
-          type="submit"
-          :disabled="isCreating"
+        <button type="submit" :disabled="isCreating"
           class="w-full rounded-md bg-blue-600 p-3 text-white transition hover:bg-blue-700"
-          :class="{ 'opacity-50': isCreating }"
-        >
+          :class="{ 'opacity-50': isCreating }">
           {{ isCreating ? 'Guardando...' : 'Añadir al catálogo' }}
         </button>
       </form>
@@ -150,11 +123,7 @@ const handleRequestLoan = async () => {
         </p>
 
         <div v-else class="space-y-4">
-          <div
-            v-for="tool in toolsStore.tools"
-            :key="tool.id"
-            class="rounded-md border p-4"
-          >
+          <div v-for="tool in toolsStore.tools" :key="tool.id" class="rounded-md border p-4">
             <h3 class="text-xl font-bold">{{ tool.name }}</h3>
             <p class="text-gray-700">{{ tool.description }}</p>
             <div class="mt-2 flex items-center justify-between text-sm">
@@ -162,20 +131,18 @@ const handleRequestLoan = async () => {
                 {{ tool.category }}
               </span>
               <span class="text-gray-500">
-                Dueño: <strong>{{ tool.owner?.name || '...' }}</strong>
+                Dueño: <RouterLink v-if="tool.owner" :to="{ name: 'user-profile', params: { id: tool.owner.id } }"
+                  class="font-bold hover:text-blue-600 hover:underline cursor-pointer">
+                  {{ tool.owner.name }}
+                </RouterLink>
+                <span v-else>...</span>
               </span>
 
-              <button
-                v-if="authStore.user?.userId !== tool.ownerId"
-                @click="openRequestModal(tool)"
-                class="rounded-md bg-green-500 px-3 py-1 text-white transition hover:bg-green-600"
-              >
+              <button v-if="authStore.user?.userId !== tool.ownerId" @click="openRequestModal(tool)"
+                class="rounded-md bg-green-500 px-3 py-1 text-white transition hover:bg-green-600">
                 Solicitar
               </button>
-              <span
-                v-else
-                class="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700"
-              >
+              <span v-else class="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-gray-700">
                 Es tuya
               </span>
             </div>
@@ -185,62 +152,36 @@ const handleRequestLoan = async () => {
     </div>
   </div>
 
-  <div
-    v-if="showModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-  >
+  <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
       <h2 class="mb-4 text-2xl font-bold">
         Solicitar: {{ selectedTool?.name }}
       </h2>
 
-      <div
-        v-if="toolsStore.error"
-        class="mb-4 rounded-md bg-red-100 p-3 text-center text-sm text-red-700"
-      >
+      <div v-if="toolsStore.error" class="mb-4 rounded-md bg-red-100 p-3 text-center text-sm text-red-700">
         {{ toolsStore.error }}
       </div>
-      <div
-        v-if="toolsStore.successMessage"
-        class="mb-4 rounded-md bg-green-100 p-3 text-center text-sm text-green-700"
-      >
+      <div v-if="toolsStore.successMessage" class="mb-4 rounded-md bg-green-100 p-3 text-center text-sm text-green-700">
         {{ toolsStore.successMessage }}
       </div>
-      
+
       <form @submit.prevent="handleRequestLoan">
         <div class="mb-4">
           <label class="mb-2 block font-medium">Desde:</label>
-          <input
-            type="date"
-            v-model="loanDates.startDate"
-            class="w-full rounded-md border p-3"
-            required
-          />
+          <input type="date" v-model="loanDates.startDate" class="w-full rounded-md border p-3" required />
         </div>
         <div class="mb-4">
           <label class="mb-2 block font-medium">Hasta:</label>
-          <input
-            type="date"
-            v-model="loanDates.endDate"
-            class="w-full rounded-md border p-3"
-            required
-          />
+          <input type="date" v-model="loanDates.endDate" class="w-full rounded-md border p-3" required />
         </div>
 
         <div class="mt-6 flex justify-end gap-4">
-          <button
-            type="button"
-            @click="showModal = false"
-            class="rounded-md bg-gray-200 px-4 py-2 text-gray-800 hover:bg-gray-300"
-          >
+          <button type="button" @click="showModal = false"
+            class="rounded-md bg-gray-200 px-4 py-2 text-gray-800 hover:bg-gray-300">
             Cancelar
           </button>
-          <button
-            type="submit"
-            :disabled="isRequesting"
-            class="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-            :class="{'opacity-50': isRequesting}"
-          >
+          <button type="submit" :disabled="isRequesting"
+            class="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700" :class="{ 'opacity-50': isRequesting }">
             {{ isRequesting ? 'Enviando...' : 'Confirmar Solicitud' }}
           </button>
         </div>
