@@ -1,7 +1,7 @@
 import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 
@@ -15,6 +15,7 @@ export class UsersService {
   async findOneByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOneBy({ email });
   }
+
   async create(createUserDto: CreateUserDto): Promise<any> {
     const { email, password, name } = createUserDto;
 
@@ -35,13 +36,13 @@ export class UsersService {
     const savedUser = await this.userRepository.save(newUser);
 
     const { password: _, ...result } = savedUser;
-
     return result;
   }
+
   async findOnePublic(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: ['tools'],
+      relations: ['tools'], 
     });
 
     if (!user) {
@@ -51,5 +52,19 @@ export class UsersService {
     const { password, ...result } = user;
     return result as User;
   }
-  
+
+  async promoteToAdmin(email: string): Promise<User> {
+    const user = await this.userRepository.findOneBy({ email });
+    
+    if (!user) {
+      throw new NotFoundException(`Usuario con email ${email} no encontrado`);
+    }
+    
+    user.role = UserRole.ADMIN; 
+    
+    const savedUser = await this.userRepository.save(user);
+    
+    const { password: _, ...result } = savedUser;
+    return result as User;
+  }
 }
