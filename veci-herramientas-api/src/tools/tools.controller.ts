@@ -18,6 +18,15 @@ export class ToolsController {
   }
 
   /**
+   * NUEVO: El dueño marca la herramienta como VENDIDA.
+   * Esto la saca del catálogo y la pone como no disponible.
+   */
+  @Patch(':id/sell')
+  markAsSold(@Param('id') id: string, @Request() req: any) {
+    return this.toolsService.markAsSold(id, req.user.userId);
+  }
+
+  /**
    * Obtiene todas las herramientas DISPONIBLES y APROBADAS (Catálogo público)
    */
   @Get()
