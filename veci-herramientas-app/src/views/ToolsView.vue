@@ -8,7 +8,7 @@ const toolsStore = useToolsStore()
 const authStore = useAuthStore()
 const router = useRouter()
 const newTool = ref({
-  name: '',
+  name: '', 
   description: '',
   category: 'Carpintería',
   type: 'loan',
@@ -28,7 +28,6 @@ const searchQuery = ref('')
 const filterCategory = ref('')
 const filterType = ref('all') 
 
-// --- COMPUTADA PARA FILTRAR ---
 const filteredTools = computed(() => {
   return toolsStore.tools.filter(tool => {
     // 1. Filtro Texto
@@ -36,10 +35,8 @@ const filteredTools = computed(() => {
     const matchesName = tool.name.toLowerCase().includes(query) || 
                         (tool.description && tool.description.toLowerCase().includes(query))
     
-    // 2. Filtro Categoría
     const matchesCategory = filterCategory.value ? tool.category === filterCategory.value : true
 
-    // 3. Nuevo: Filtro Tipo (Venta o Préstamo)
     const matchesType = filterType.value === 'all' ? true : tool.type === filterType.value
 
     return matchesName && matchesCategory && matchesType
