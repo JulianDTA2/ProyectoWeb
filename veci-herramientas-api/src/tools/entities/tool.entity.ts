@@ -57,4 +57,7 @@ export class Tool {
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   price: number;
 
+  @Column({ default: true })
+  available: boolean;
+
 }

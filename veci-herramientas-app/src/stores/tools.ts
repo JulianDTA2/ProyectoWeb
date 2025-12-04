@@ -56,6 +56,16 @@ export const useToolsStore = defineStore('tools', {
         return false
       }
     },
+    async fetchUnavailableTools() {
+      try {
+        const response = await api.get('/tools/unavailable')
+        // Podrías guardarlo en otra variable de estado si quieres separarlo
+        // o usar una lógica diferente. Por simplicidad, retornamos la data.
+        return response.data
+      } catch (e) {
+        return []
+      }
+    },
 
     async requestLoan(data: { toolId: string; startDate: string; endDate: string }) {
       this.error = null

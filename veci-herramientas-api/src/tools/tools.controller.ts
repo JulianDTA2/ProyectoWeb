@@ -1,62 +1,69 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, UnauthorizedException} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ToolsService } from './tools.service';
 import { CreateToolDto } from './dto/create-tool.dto';
-import { UpdateToolDto } from './dto/update-tool.dto';
 import { ToolStatus } from './entities/tool.entity';
-import { UserRole } from '../users/entities/user.entity';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('tools')
 export class ToolsController {
   constructor(private readonly toolsService: ToolsService) {}
 
+  /**
+   * Crea una nueva herramienta (Estado inicial: PENDING)
+   */
   @Post()
   create(@Body() createToolDto: CreateToolDto, @Request() req: any) {
-    const userId = req.user.userId;
-    return this.toolsService.create(createToolDto, userId);
+    return this.toolsService.create(createToolDto, req.user.userId);
   }
 
+  /**
+   * Obtiene todas las herramientas DISPONIBLES y APROBADAS (Catálogo público)
+   */
   @Get()
   findAll() {
     return this.toolsService.findAll();
   }
 
+  /**
+   * Obtiene herramientas NO DISPONIBLES (Prestadas o Vendidas - Historial)
+   */
+  @Get('unavailable')
+  getUnavailable() {
+    return this.toolsService.findAllUnavailable();
+  }
+
+  /**
+   * ADMIN: Obtiene herramientas pendientes de aprobación
+   */
   @Get('pending')
   getPending(@Request() req: any) {
-    this.checkAdmin(req.user);
+    if (req.user.role !== 'admin') throw new UnauthorizedException('Acceso denegado');
     return this.toolsService.findAllPending();
   }
 
+  /**
+   * ADMIN: Aprueba o Rechaza una herramienta
+   */
   @Patch(':id/status')
-  updateStatus(
-    @Param('id') id: string, 
-    @Body('status') status: ToolStatus,
-    @Request() req: any
-  ) {
-    this.checkAdmin(req.user);
+  updateStatus(@Param('id') id: string, @Body('status') status: ToolStatus, @Request() req: any) {
+    if (req.user.role !== 'admin') throw new UnauthorizedException('Acceso denegado');
     return this.toolsService.updateStatus(id, status);
   }
 
-  private checkAdmin(user: any) {
-    // IMPORTANTE: Debemos asegurarnos que el JWT strategy devuelva el rol
-    // Por ahora, asumiremos que si el email es 'admin@veci.com' es admin
-    // O mejor, actualiza tu JWT Strategy para incluir el rol.
-    if (user.role !== UserRole.ADMIN) {
-        // Fallback temporal para pruebas si no has actualizado JWT:
-        // if (user.email !== 'admin@veci.com') 
-        throw new UnauthorizedException('Solo administradores');
-    }
-  }
-
+  /**
+   * Obtiene una herramienta por ID
+   */
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.toolsService.findOne(id);
   }
 
+  /**
+   * Elimina una herramienta (Solo el dueño)
+   */
   @Delete(':id')
   remove(@Param('id') id: string, @Request() req: any) {
-    const userId = req.user.userId;
-    return this.toolsService.remove(id, userId);
+    return this.toolsService.remove(id, req.user.userId);
   }
 }

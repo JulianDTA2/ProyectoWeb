@@ -103,9 +103,13 @@ const handleRequestLoan = async () => {
 }
 
 // --- Comprar ---
-const handleBuy = (tool: any) => {
-  // Aquí iría la integración con pasarela de pagos o chat
-  alert(`¡Interesante! Para comprar "${tool.name}" por $${tool.price}, contacta a ${tool.owner.name}. (Funcionalidad de chat próximamente)`)
+const handleBuy = async (tool: any) => {
+  // Redirigir al chat con el ID del dueño
+  router.push({ 
+    name: 'chat', 
+    query: { userId: tool.ownerId } 
+  })
+  // Opcional: Se podría usar el store de mensajes para pre-llenar un mensaje de "Hola, me interesa tu herramienta..."
 }
 </script>
 

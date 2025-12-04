@@ -25,6 +25,12 @@ const handleLogout = () => {
           <RouterLink to="/notifications" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition">
             <span>🔔</span> Notificaciones
           </RouterLink>
+
+          <!-- BOTÓN MENSAJES-->
+          <RouterLink to="/chat" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition">
+            <span>💬</span> Mensajes
+          </RouterLink>
+
           <!-- BOTÓN ADMIN (SOLO ADMINS) -->
           <RouterLink v-if="authStore.isAdmin" to="/admin" class="bg-gray-500 hover:bg-gray-800 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg">
             <span>🛡️</span> Panel Admin
@@ -50,6 +56,12 @@ const handleLogout = () => {
           <div class="mb-4 bg-yellow-50 p-4 rounded-full text-4xl group-hover:bg-yellow-100 transition">👤</div>
           <h2 class="text-xl font-bold text-gray-800 mb-2">Mi Perfil</h2>
           <p class="text-sm text-gray-500">Revisa tu reputación y herramientas públicas.</p>
+        </RouterLink>
+
+        <RouterLink to="/unavailable" class="group bg-white p-8 rounded-xl shadow hover:shadow-xl transition text-center border border-transparent hover:border-gray-300">
+          <div class="text-4xl mb-4 group-hover:scale-110 transition">🚫</div>
+          <h2 class="text-xl font-bold text-gray-800 mb-2">Historial</h2>
+          <p class="text-sm text-gray-500">Ver herramientas vendidas o prestadas.</p>
         </RouterLink>
       </div>
 
