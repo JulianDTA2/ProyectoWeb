@@ -9,7 +9,7 @@ const router = useRouter()
 const notifications = ref<any[]>([])
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://veci-api.onrender.com',
   headers: { Authorization: `Bearer ${authStore.token}` }
 })
 
