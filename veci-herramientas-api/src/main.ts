@@ -8,7 +8,8 @@ async function bootstrap() {
     origin: [
       'http://localhost:5173',      
       'http://localhost:4173',      
-      /https:\/\/.*\.vercel\.app/,  
+      /https:\/\/.*\.vercel\.app/,
+      /https:\/\/.*\.onrender\.com/,
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
