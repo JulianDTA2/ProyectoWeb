@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { useAuthStore } from './auth' 
+import { useAuthStore } from './auth'
 
 const api = axios.create({
   baseURL: 'http://localhost:3000',
@@ -34,13 +34,22 @@ export const useToolsStore = defineStore('tools', {
       }
     },
 
-    async createTool(data: { name: string; description: string; category: string }) {
+    // --- ACTUALIZADO: Acepta type y price ---
+    async createTool(data: { 
+      name: string; 
+      description: string; 
+      category: string; 
+      type: string; // 'loan' o 'sale'
+      price: number;
+    }) {
       this.error = null
       this.successMessage = null
       try {
         const response = await api.post('/tools', data)
-        this.tools.push(response.data)
-        this.successMessage = 'Herramienta creada con éxito.'
+        // No la agregamos a la lista local inmediatamente porque el estado es PENDING
+        // y requiere aprobación del admin.
+        // this.tools.push(response.data) 
+        
         return true
       } catch (e: any) {
         this.error = e.response?.data?.message || 'Error al crear la herramienta'

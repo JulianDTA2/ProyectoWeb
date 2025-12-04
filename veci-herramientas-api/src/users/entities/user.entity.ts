@@ -8,10 +8,16 @@ import {
   OneToMany,
 } from 'typeorm';
 
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
   @OneToMany(() => Tool, (tool) => tool.owner)
   tools: Tool[];
 
@@ -29,4 +35,12 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({
+    type: 'varchar', // 'enum' no es soportado nativamente en mssql, usamos varchar
+    default: UserRole.USER,
+  })
+
+  role: UserRole;
+
 }

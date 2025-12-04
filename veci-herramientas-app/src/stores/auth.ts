@@ -5,10 +5,12 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
 })
 
+// Definimos la interfaz del Usuario con el nuevo campo 'role'
 interface User {
   userId: string;
   email: string;
   name: string;
+  role: 'user' | 'admin'; // <-- Nuevo campo importante
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -20,6 +22,7 @@ export const useAuthStore = defineStore('auth', {
 
   getters: {
     isAuthenticated: (state) => !!state.token,
+    isAdmin: (state) => state.user?.role === 'admin', // Helper para verificar si es admin
   },
 
   actions: {
@@ -30,6 +33,8 @@ export const useAuthStore = defineStore('auth', {
         const { access_token } = response.data
         this.token = access_token
         localStorage.setItem('token', access_token)
+        // Cargar perfil inmediatamente para tener el rol
+        await this.fetchProfile()
         return true
       } catch (e: any) {
         this.error = e.response?.data?.message || 'Error al iniciar sesión'

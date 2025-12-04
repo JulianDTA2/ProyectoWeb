@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { ToolsModule } from './tools/tools.module';
 import { LoansModule } from './loans/loans.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     ToolsModule,
     LoansModule,
     ReviewsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
