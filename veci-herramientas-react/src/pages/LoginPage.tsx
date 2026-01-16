@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ChangeEvent } from 'react'; // <--- CORREGIDO
+import { useState, type FormEvent, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -33,7 +33,7 @@ export default function LoginPage() {
     setIsLoading(false);
 
     if (success) {
-      navigate('/dashboard'); // Redirige al dashboard
+      navigate('/dashboard');
     }
   };
 

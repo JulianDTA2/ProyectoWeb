@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import api from '../api/axios';
 
-// Interfaces basadas en tu código Vue
 interface User {
   userId: string;
   email: string;
@@ -30,18 +29,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Equivalente a la acción fetchProfile de Pinia
   const fetchProfile = async () => {
-    try {
-      const response = await api.get<User>('/profile'); // Endpoint según tu store de Vue
-      setUser(response.data);
-    } catch (e) {
-      console.error("Error fetching profile", e);
-      logout();
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    // CORRECCIÓN: La ruta debe coincidir con tu backend
+    const response = await api.get<User>('/auth/profile'); 
+    setUser(response.data);
+  } catch (e) {
+    console.error("Error fetching profile", e);
+    logout();
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     if (token) {
@@ -59,7 +58,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       localStorage.setItem('token', access_token);
       setToken(access_token);
-      // fetchProfile se ejecutará automáticamente por el useEffect
       return true;
     } catch (e: any) {
       setError(e.response?.data?.message || 'Error al iniciar sesión');
