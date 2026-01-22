@@ -1,9 +1,9 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-// ICONOS LUCIDE
+// ICONOS LUCIDE (Limpios: Se eliminó 'User')
 import { 
-  ArrowLeft, Star, User, MessageSquare, ShieldCheck, 
+  ArrowLeft, Star, MessageSquare, ShieldCheck, 
   MapPin, Wrench, Quote 
 } from 'lucide-react';
 
@@ -67,7 +67,7 @@ export default function UserProfilePage() {
                 
                 {/* Avatar / Foto */}
                 <div className="flex w-full md:w-64 items-center justify-center bg-[#23A0FF] p-8 border-b-4 md:border-b-0 md:border-r-4 border-black relative overflow-hidden">
-                     {/* Patrón de fondo decorativo */}
+                     {/* Patrón de fondo */}
                      <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
                      
                      <div className="h-32 w-32 border-4 border-black bg-white flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-10">
