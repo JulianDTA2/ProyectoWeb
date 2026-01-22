@@ -11,106 +11,133 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="mx-auto max-w-5xl">
+    // FONDO: Un tono gris/azulado claro típico del estilo, con fuente sans
+    <div className="min-h-screen bg-[#E0E7FF] p-6 md:p-10 font-sans">
+      <div className="mx-auto max-w-6xl">
         
-        {/* HEADER DE BIENVENIDA */}
-        <div className="mb-8 rounded-xl bg-white p-8 shadow-lg border-l-8 border-blue-600 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">
-              Hola, {user?.name || 'Vecino'}!
-            </h1>
-            <p className="mt-2 text-gray-600">Bienvenido a tu comunidad de herramientas.</p>
-          </div>
+        {/* --- HEADER --- */}
+        <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between rounded-xl border-2 border-black bg-white p-6 shadow-neo">
           
-          <div className="flex flex-wrap justify-center gap-3">
-            {/* BOTÓN NOTIFICACIONES */}
+          {/* Bienvenida */}
+          <div>
+            <h1 className="text-4xl font-black uppercase italic tracking-tight text-black sm:text-5xl">
+              Hola, {user?.name?.split(' ')[0] || 'Vecino'}! 👋
+            </h1>
+            <p className="mt-2 text-lg font-bold text-gray-700">
+              Bienvenido a tu comunidad de herramientas.
+            </p>
+          </div>
+
+          {/* Botones de Acción Rápida (Top Right) */}
+          <div className="flex flex-wrap gap-3">
             <Link 
               to="/notifications" 
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition"
+              className="flex items-center gap-2 rounded-md border-2 border-black bg-[#FFDE00] px-4 py-2 font-bold text-black shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg active:translate-y-0 active:shadow-none"
             >
-              <span>🔔</span> Notificaciones
+              🔔 <span className="hidden sm:inline">Notificaciones</span>
             </Link>
 
-            {/* BOTÓN MENSAJES */}
             <Link 
               to="/chat" 
-              className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition"
+              className="flex items-center gap-2 rounded-md border-2 border-black bg-[#FF90E8] px-4 py-2 font-bold text-black shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg active:translate-y-0 active:shadow-none"
             >
-              <span>💬</span> Mensajes
+              💬 <span className="hidden sm:inline">Mensajes</span>
             </Link>
 
-            {/* BOTÓN ADMIN (Condicional) */}
+            {/* Botón Admin (Solo si es admin) */}
             {isAdmin && (
               <Link 
                 to="/admin" 
-                className="bg-gray-700 hover:bg-gray-900 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg"
+                className="flex items-center gap-2 rounded-md border-2 border-black bg-[#7e22ce] px-4 py-2 font-bold text-white shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg active:translate-y-0 active:shadow-none"
               >
-                <span>🛡️</span> Panel Admin
+                🛡️ <span className="hidden sm:inline">Admin Panel</span>
               </Link>
             )}
           </div>
         </div>
 
-        {/* GRID DE ACCIONES PRINCIPALES */}
-        <div className="grid gap-6 md:grid-cols-3 mb-12">
+        {/* --- GRID DE NAVEGACIÓN PRINCIPAL --- */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           
           {/* TARJETA 1: CATÁLOGO */}
           <Link 
             to="/tools" 
-            className="group bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition border border-transparent hover:border-blue-100 flex flex-col items-center text-center"
+            className="group relative overflow-hidden rounded-xl border-2 border-black bg-[#23A0FF] p-8 shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg"
           >
-            <div className="mb-4 bg-blue-50 p-4 rounded-full text-4xl group-hover:bg-blue-100 transition">
-              🛠️
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-black bg-white text-4xl shadow-sm">
+                🛠️
+              </div>
+              <h2 className="mb-1 text-2xl font-black uppercase text-white drop-shadow-[2px_2px_0_rgba(0,0,0,1)]">
+                Catálogo
+              </h2>
+              <p className="font-bold text-white opacity-90">
+                Explora, compra o pide prestado.
+              </p>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Catálogo</h2>
-            <p className="text-sm text-gray-500">Compra, vende o presta herramientas en tu zona.</p>
+            {/* Elemento decorativo de fondo */}
+            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full border-2 border-black bg-white opacity-20 transition-transform group-hover:scale-150"></div>
           </Link>
 
           {/* TARJETA 2: MIS PRÉSTAMOS */}
           <Link 
             to="/my-loans" 
-            className="group bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition border border-transparent hover:border-purple-100 flex flex-col items-center text-center"
+            className="group relative overflow-hidden rounded-xl border-2 border-black bg-[#00F0FF] p-8 shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg"
           >
-            <div className="mb-4 bg-purple-50 p-4 rounded-full text-4xl group-hover:bg-purple-100 transition">
-              🤝
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-black bg-white text-4xl shadow-sm">
+                🤝
+              </div>
+              <h2 className="mb-1 text-2xl font-black uppercase text-black">
+                Mis Préstamos
+              </h2>
+              <p className="font-bold text-gray-800">
+                Tus solicitudes enviadas y recibidas.
+              </p>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Mis Préstamos</h2>
-            <p className="text-sm text-gray-500">Gestiona tus solicitudes enviadas y recibidas.</p>
           </Link>
 
           {/* TARJETA 3: MI PERFIL */}
           {user && (
             <Link 
               to={`/user/${user.userId}`} 
-              className="group bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition border border-transparent hover:border-yellow-100 flex flex-col items-center text-center"
+              className="group relative overflow-hidden rounded-xl border-2 border-black bg-[#FFDE00] p-8 shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg"
             >
-              <div className="mb-4 bg-yellow-50 p-4 rounded-full text-4xl group-hover:bg-yellow-100 transition">
-                👤
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-black bg-white text-4xl shadow-sm">
+                  👤
+                </div>
+                <h2 className="mb-1 text-2xl font-black uppercase text-black">
+                  Mi Perfil
+                </h2>
+                <p className="font-bold text-gray-800">
+                  Tu reputación y herramientas.
+                </p>
               </div>
-              <h2 className="text-xl font-bold text-gray-800 mb-2">Mi Perfil</h2>
-              <p className="text-sm text-gray-500">Revisa tu reputación y herramientas públicas.</p>
             </Link>
           )}
 
-          {/* TARJETA 4: HISTORIAL / NO DISPONIBLES */}
+          {/* TARJETA 4: HISTORIAL / NO DISPONIBLES (Ocupa ancho completo en móviles, o una celda en grid grande) */}
           <Link 
             to="/unavailable" 
-            className="group bg-white p-8 rounded-xl shadow hover:shadow-xl transition text-center border border-transparent hover:border-gray-300 md:col-span-3 lg:col-span-1"
+            className="group relative flex flex-col items-center justify-center rounded-xl border-2 border-black bg-white p-8 text-center shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg sm:col-span-2 lg:col-span-3"
           >
-            <div className="text-4xl mb-4 group-hover:scale-110 transition">
-              🚫
-            </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Historial</h2>
-            <p className="text-sm text-gray-500">Ver herramientas vendidas o prestadas.</p>
+            <div className="mb-2 text-4xl transition-transform group-hover:scale-110">🚫</div>
+            <h2 className="text-xl font-black uppercase text-gray-800">
+              Historial / No Disponibles
+            </h2>
+            <p className="text-sm font-bold text-gray-500">
+              Consulta herramientas que ya han sido vendidas o están prestadas actualmente.
+            </p>
           </Link>
+
         </div>
 
-        {/* LOGOUT */}
-        <div className="text-center">
+        {/* --- LOGOUT --- */}
+        <div className="mt-12 text-center">
           <button 
             onClick={handleLogout} 
-            className="text-red-500 font-medium hover:underline hover:text-red-700 transition-colors"
+            className="inline-block rounded-lg border-2 border-black bg-red-500 px-8 py-3 font-black uppercase text-white shadow-neo transition-all hover:bg-red-600 hover:shadow-neo-lg active:translate-y-1 active:shadow-none"
           >
             Cerrar Sesión
           </button>

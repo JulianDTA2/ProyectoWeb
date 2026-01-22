@@ -5,7 +5,24 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      // Agregamos sombras duras (sin blur)
+      boxShadow: {
+        'neo': '4px 4px 0px 0px rgba(0,0,0,1)',     
+        'neo-sm': '2px 2px 0px 0px rgba(0,0,0,1)',  
+        'neo-lg': '8px 8px 0px 0px rgba(0,0,0,1)',   
+      },
+      colors: {
+        'neo-bg': '#f0f0f0',    
+        'neo-yellow': '#FFDE00', 
+        'neo-pink': '#FF90E8',   
+        'neo-blue': '#23A0FF',  
+        'neo-green': '#00F0FF',  
+      },
+      borderWidth: {
+        '3': '3px',
+      }
+    },
   },
   plugins: [],
 }
