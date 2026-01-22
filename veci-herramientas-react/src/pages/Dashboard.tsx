@@ -1,80 +1,122 @@
 import { useAuth } from '../context/AuthContext';
-import { useTools } from '../context/ToolsContext';
-import { useLoans } from '../context/LoansContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
-  const { user } = useAuth();
-  const { tools, loading: loadingTools } = useTools();
-  const { loans, loading: loadingLoans } = useLoans();
+  const { user, isAdmin, logout } = useAuth();
+  const navigate = useNavigate();
 
-  // Cálculos simples (equivalentes a computed en Vue)
-  const activeLoans = loans.filter(l => l.status === 'active').length;
-  const availableTools = tools.filter(t => t.status === 'available').length;
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      {/* Header simple */}
-      <header className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">Hola, {user?.name} 👋</h1>
-          <p className="text-gray-600">Bienvenido a Veci-Herramientas</p>
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="mx-auto max-w-5xl">
+        
+        {/* HEADER DE BIENVENIDA */}
+        <div className="mb-8 rounded-xl bg-white p-8 shadow-lg border-l-8 border-blue-600 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Hola, {user?.name || 'Vecino'}!
+            </h1>
+            <p className="mt-2 text-gray-600">Bienvenido a tu comunidad de herramientas.</p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-3">
+            {/* BOTÓN NOTIFICACIONES */}
+            <Link 
+              to="/notifications" 
+              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition"
+            >
+              <span>🔔</span> Notificaciones
+            </Link>
+
+            {/* BOTÓN MENSAJES */}
+            <Link 
+              to="/chat" 
+              className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition"
+            >
+              <span>💬</span> Mensajes
+            </Link>
+
+            {/* BOTÓN ADMIN (Condicional) */}
+            {isAdmin && (
+              <Link 
+                to="/admin" 
+                className="bg-gray-700 hover:bg-gray-900 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-lg"
+              >
+                <span>🛡️</span> Panel Admin
+              </Link>
+            )}
+          </div>
         </div>
-        <div className="text-right">
-          <Link to="/tools" className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-            Ver Herramientas
+
+        {/* GRID DE ACCIONES PRINCIPALES */}
+        <div className="grid gap-6 md:grid-cols-3 mb-12">
+          
+          {/* TARJETA 1: CATÁLOGO */}
+          <Link 
+            to="/tools" 
+            className="group bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition border border-transparent hover:border-blue-100 flex flex-col items-center text-center"
+          >
+            <div className="mb-4 bg-blue-50 p-4 rounded-full text-4xl group-hover:bg-blue-100 transition">
+              🛠️
+            </div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">Catálogo</h2>
+            <p className="text-sm text-gray-500">Compra, vende o presta herramientas en tu zona.</p>
+          </Link>
+
+          {/* TARJETA 2: MIS PRÉSTAMOS */}
+          <Link 
+            to="/my-loans" 
+            className="group bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition border border-transparent hover:border-purple-100 flex flex-col items-center text-center"
+          >
+            <div className="mb-4 bg-purple-50 p-4 rounded-full text-4xl group-hover:bg-purple-100 transition">
+              🤝
+            </div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">Mis Préstamos</h2>
+            <p className="text-sm text-gray-500">Gestiona tus solicitudes enviadas y recibidas.</p>
+          </Link>
+
+          {/* TARJETA 3: MI PERFIL */}
+          {user && (
+            <Link 
+              to={`/user/${user.userId}`} 
+              className="group bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition border border-transparent hover:border-yellow-100 flex flex-col items-center text-center"
+            >
+              <div className="mb-4 bg-yellow-50 p-4 rounded-full text-4xl group-hover:bg-yellow-100 transition">
+                👤
+              </div>
+              <h2 className="text-xl font-bold text-gray-800 mb-2">Mi Perfil</h2>
+              <p className="text-sm text-gray-500">Revisa tu reputación y herramientas públicas.</p>
+            </Link>
+          )}
+
+          {/* TARJETA 4: HISTORIAL / NO DISPONIBLES */}
+          <Link 
+            to="/unavailable" 
+            className="group bg-white p-8 rounded-xl shadow hover:shadow-xl transition text-center border border-transparent hover:border-gray-300 md:col-span-3 lg:col-span-1"
+          >
+            <div className="text-4xl mb-4 group-hover:scale-110 transition">
+              🚫
+            </div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">Historial</h2>
+            <p className="text-sm text-gray-500">Ver herramientas vendidas o prestadas.</p>
           </Link>
         </div>
-      </header>
 
-      {/* Stats Cards */}
-      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-        <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-500">Mis Préstamos Activos</h3>
-          <p className="mt-2 text-4xl font-bold text-blue-600">
-            {loadingLoans ? '...' : activeLoans}
-          </p>
+        {/* LOGOUT */}
+        <div className="text-center">
+          <button 
+            onClick={handleLogout} 
+            className="text-red-500 font-medium hover:underline hover:text-red-700 transition-colors"
+          >
+            Cerrar Sesión
+          </button>
         </div>
-        <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-500">Herramientas Disponibles</h3>
-          <p className="mt-2 text-4xl font-bold text-green-600">
-            {loadingTools ? '...' : availableTools}
-          </p>
-        </div>
-        <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-500">Mi Rol</h3>
-          <p className="mt-2 text-xl font-bold text-purple-600 capitalize">
-            {user?.role || 'Usuario'}
-          </p>
-        </div>
+
       </div>
-
-      {/* Lista rápida de herramientas recientes */}
-      <section>
-        <h2 className="mb-4 text-xl font-bold text-gray-800">Herramientas Recientes</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {tools.slice(0, 4).map((tool) => (
-            <div key={tool.id} className="overflow-hidden rounded-lg bg-white shadow transition hover:shadow-md">
-              <div className="h-32 w-full bg-gray-200 object-cover">
-                {/* Placeholder para imagen */}
-                {tool.image ? (
-                  <img src={tool.image} alt={tool.name} className="h-full w-full object-cover" />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-gray-400">Sin imagen</div>
-                )}
-              </div>
-              <div className="p-4">
-                <h3 className="font-bold text-gray-800">{tool.name}</h3>
-                <p className="text-sm text-gray-600">${tool.price}/día</p>
-                <span className={`mt-2 inline-block rounded-full px-2 py-1 text-xs font-semibold 
-                  ${tool.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                  {tool.status === 'available' ? 'Disponible' : 'No disponible'}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
