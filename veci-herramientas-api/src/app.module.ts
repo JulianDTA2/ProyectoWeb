@@ -10,6 +10,7 @@ import { LoansModule } from './loans/loans.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { MessagesModule } from './messages/messages.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { MessagesModule } from './messages/messages.module';
     ReviewsModule,
     NotificationsModule,
     MessagesModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
