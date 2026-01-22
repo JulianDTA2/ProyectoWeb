@@ -2,6 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios';
+// ICONOS LUCIDE
+import { 
+  Send, MessageSquare, User, ArrowLeft, Search, 
+  MoreVertical, Phone, DollarSign 
+} from 'lucide-react';
 
 export default function ChatPage() {
   const { user } = useAuth();
@@ -95,64 +100,135 @@ export default function ChatPage() {
     } catch (e) { alert('Error al registrar venta'); }
   };
 
+  // --- DISEÑO NEUBRUTALISTA ---
   return (
-    <div className="h-screen bg-gray-100 p-4 flex flex-col">
-       <Link to="/dashboard" className="mb-3 w-fit bg-white px-4 py-2 rounded-lg text-blue-600 font-medium shadow-sm">
-         &larr; Volver al Dashboard
-       </Link>
+    <div className="flex h-screen flex-col bg-[#F0F0E0] p-4 font-sans md:p-6">
+       
+       {/* HEADER */}
+       <div className="mb-4 flex items-center justify-between border-b-4 border-black pb-4">
+        <div className="flex items-center gap-4">
+            <Link 
+                to="/dashboard" 
+                className="group flex items-center gap-2 border-4 border-black bg-white px-4 py-2 text-xs font-black uppercase hover:bg-black hover:text-white transition-colors shadow-neo hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]"
+            >
+             <ArrowLeft strokeWidth={4} className="h-4 w-4" /> VOLVER
+            </Link>
+            <h1 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-black">
+                Mensajes
+            </h1>
+        </div>
+       </div>
 
-       <div className="flex-1 flex gap-4 overflow-hidden bg-white rounded-xl shadow-lg border border-gray-200">
-         {/* Sidebar */}
-         <div className="w-1/3 border-r bg-gray-50 flex flex-col min-w-[250px]">
-           <div className="p-4 border-b font-bold text-gray-700">Mensajes ({contacts.length})</div>
-           <div className="flex-1 overflow-y-auto">
-             {contacts.map(contact => (
-               <div key={contact.id} onClick={() => setActiveChat(contact)}
-                 className={`p-4 border-b cursor-pointer hover:bg-blue-50 flex items-center gap-3 ${activeChat?.id === contact.id ? 'bg-blue-100' : ''}`}>
-                 <div className="h-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">
-                   {contact.name.charAt(0)}
-                 </div>
-                 <div>
-                   <p className="font-semibold">{contact.name}</p>
-                   <p className="text-xs text-gray-500 truncate">{contact.lastMessage}</p>
-                 </div>
-               </div>
-             ))}
-           </div>
+       {/* CONTENEDOR PRINCIPAL */}
+       <div className="flex flex-1 overflow-hidden border-4 border-black bg-white shadow-neo">
+         
+         {/* SIDEBAR (Lista de Contactos) */}
+         <div className={`flex w-full flex-col border-r-4 border-black bg-gray-50 md:w-80 ${activeChat ? 'hidden md:flex' : 'flex'}`}>
+            <div className="border-b-4 border-black bg-[#FFDE00] p-4 font-black uppercase tracking-widest text-sm flex justify-between items-center">
+                <span>Contactos ({contacts.length})</span>
+                <Search className="w-4 h-4" strokeWidth={3} />
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-2 space-y-2">
+              {contacts.map(contact => (
+                <div key={contact.id} onClick={() => setActiveChat(contact)}
+                  className={`group relative w-full border-4 border-black p-4 text-left transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo cursor-pointer
+                  ${activeChat?.id === contact.id ? 'bg-black text-white' : 'bg-white text-black'}`}>
+                  
+                  <div className="flex items-center gap-3">
+                    <div className={`h-10 w-10 border-2 flex items-center justify-center font-black text-lg
+                        ${activeChat?.id === contact.id ? 'bg-white text-black border-white' : 'bg-black text-white border-black'}`}>
+                      {contact.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-black uppercase truncate">{contact.name}</p>
+                      <p className={`text-xs font-bold truncate ${activeChat?.id === contact.id ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {contact.lastMessage || '...'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
          </div>
 
-         {/* Chat Area */}
-         <div className="flex-1 flex flex-col">
+         {/* CHAT AREA */}
+         <div className={`relative flex flex-1 flex-col bg-[#E5E5E5] ${!activeChat ? 'hidden md:flex' : 'flex'}`}>
            {activeChat ? (
              <>
-               <div className="p-4 border-b flex justify-between items-center shadow-sm z-10">
-                 <h2 className="font-bold text-lg">{activeChat.name}</h2>
-                 {currentTool && currentTool.ownerId === user?.userId && (
-                   <button onClick={markAsSold} className="bg-green-600 text-white px-3 py-1 rounded shadow-sm hover:bg-green-700 text-sm">
-                     💰 Marcar como Vendido
-                   </button>
-                 )}
+               {/* HEADER DEL CHAT ACTIVO */}
+               <div className="flex items-center justify-between border-b-4 border-black bg-white p-4 shadow-sm z-10">
+                 <div className="flex items-center gap-3">
+                    <button onClick={() => setActiveChat(null)} className="border-2 border-black p-1 hover:bg-gray-200 md:hidden">
+                        <ArrowLeft className="h-5 w-5" strokeWidth={3} />
+                    </button>
+                    <div className="h-10 w-10 border-4 border-black bg-[#FF90E8] flex items-center justify-center">
+                        <User className="h-5 w-5 text-black" strokeWidth={3} />
+                    </div>
+                    <h2 className="font-black uppercase text-lg leading-none">{activeChat.name}</h2>
+                 </div>
+
+                 <div className="flex items-center gap-2">
+                    {/* Botón de Venta (Si soy dueño) */}
+                    {currentTool && currentTool.ownerId === user?.userId && (
+                        <button onClick={markAsSold} 
+                            className="border-4 border-black bg-[#00F0FF] px-4 py-2 text-xs font-black uppercase hover:bg-[#4CFFFF] hover:shadow-neo-sm transition-all flex items-center gap-2">
+                            <DollarSign strokeWidth={3} className="w-4 h-4" /> VENDER
+                        </button>
+                    )}
+                    <button className="hidden md:block border-4 border-black bg-white p-2 hover:bg-gray-100">
+                        <Phone className="w-5 h-5" strokeWidth={3} />
+                    </button>
+                 </div>
                </div>
 
-               <div className="flex-1 overflow-y-auto p-6 space-y-3 bg-gray-50">
-                 {messages.map(msg => (
-                   <div key={msg.id} className={`flex ${msg.senderId === user?.userId ? 'justify-end' : 'justify-start'}`}>
-                     <div className={`max-w-[75%] p-3 rounded-2xl text-sm shadow-sm ${msg.senderId === user?.userId ? 'bg-blue-600 text-white' : 'bg-white border'}`}>
-                       {msg.content}
-                     </div>
-                   </div>
-                 ))}
+               {/* LISTA DE MENSAJES */}
+               <div className="flex-1 space-y-6 overflow-y-auto p-6 bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]">
+                 {messages.map(msg => {
+                    const isMe = msg.senderId === user?.userId;
+                    return (
+                        <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                            <div className={`relative max-w-[85%] md:max-w-[60%]`}>
+                                <div className={`
+                                  border-4 border-black p-4 text-sm font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+                                  ${isMe ? 'bg-[#23A0FF] text-white' : 'bg-white text-black'}
+                                `}>
+                                  {msg.content}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                 })}
                  <div ref={messagesEndRef} />
                </div>
 
-               <form onSubmit={sendMessage} className="p-4 border-t bg-white flex gap-2">
-                 <input type="text" value={newMessage} onChange={e => setNewMessage(e.target.value)}
-                   className="flex-1 border rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Escribe un mensaje..." />
-                 <button type="submit" className="bg-blue-600 text-white rounded-full w-10 h-10 hover:bg-blue-700">➤</button>
+               {/* INPUT AREA */}
+               <form onSubmit={sendMessage} className="border-t-4 border-black bg-white p-4 flex gap-3">
+                 <button type="button" className="hidden md:block border-4 border-black bg-gray-100 p-3 hover:bg-gray-200 transition-colors">
+                    <MoreVertical strokeWidth={3} />
+                 </button>
+                 
+                 <input 
+                    type="text" 
+                    value={newMessage} 
+                    onChange={e => setNewMessage(e.target.value)}
+                    className="flex-1 border-4 border-black bg-gray-50 p-3 font-bold uppercase placeholder-gray-400 focus:bg-white focus:outline-none focus:shadow-neo transition-all rounded-none" 
+                    placeholder="ESCRIBE AQUÍ..." 
+                 />
+                 
+                 <button type="submit" className="border-4 border-black bg-black p-3 text-white shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none hover:bg-gray-800 transition-all">
+                    <Send className="h-6 w-6" strokeWidth={3} />
+                 </button>
                </form>
              </>
            ) : (
-             <div className="flex-1 flex items-center justify-center text-gray-400">Selecciona un chat</div>
+             <div className="flex flex-1 flex-col items-center justify-center bg-[#F0F0E0] p-8 text-center">
+                <div className="mb-6 rotate-3 border-4 border-black bg-[#FFDE00] p-6 shadow-neo">
+                    <MessageSquare className="h-16 w-16 text-black" strokeWidth={2} />
+                </div>
+                <h2 className="text-3xl font-black uppercase">Centro de Mensajes</h2>
+                <p className="font-bold uppercase text-gray-500">Selecciona un chat para comenzar.</p>
+             </div>
            )}
          </div>
        </div>

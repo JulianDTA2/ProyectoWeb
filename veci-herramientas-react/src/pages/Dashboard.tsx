@@ -1,5 +1,17 @@
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+// Importamos iconos profesionales
+import { 
+  Bell, 
+  MessageSquare, 
+  ShieldAlert, 
+  Wrench, 
+  Handshake, 
+  User, 
+  History, 
+  LogOut,
+  LayoutGrid
+} from 'lucide-react';
 
 export default function Dashboard() {
   const { user, isAdmin, logout } = useAuth();
@@ -11,89 +23,98 @@ export default function Dashboard() {
   };
 
   return (
-    // FONDO: Un tono gris/azulado claro típico del estilo, con fuente sans
-    <div className="min-h-screen bg-[#E0E7FF] p-6 md:p-10 font-sans">
-      <div className="mx-auto max-w-6xl">
+    <div className="min-h-screen bg-[#F0F0E0] p-6 md:p-12 font-sans selection:bg-black selection:text-white">
+      <div className="mx-auto max-w-7xl">
         
         {/* --- HEADER --- */}
-        <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between rounded-xl border-2 border-black bg-white p-6 shadow-neo">
+        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between border-b-4 border-black pb-8">
           
           {/* Bienvenida */}
           <div>
-            <h1 className="text-4xl font-black uppercase italic tracking-tight text-black sm:text-5xl">
-              Hola, {user?.name?.split(' ')[0] || 'Vecino'}! 👋
+            <div className="flex items-center gap-3 mb-2">
+              <LayoutGrid className="w-8 h-8 md:w-10 md:h-10 text-black" strokeWidth={3} />
+              <span className="font-bold text-sm bg-black text-white px-2 py-1 uppercase tracking-widest">Dashboard</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-black uppercase italic leading-none text-black">
+              Hola, <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-[4px_4px_0_rgba(0,0,0,1)]">
+                {user?.name?.split(' ')[0] || 'Vecino'}
+              </span>
             </h1>
-            <p className="mt-2 text-lg font-bold text-gray-700">
-              Bienvenido a tu comunidad de herramientas.
-            </p>
           </div>
 
-          {/* Botones de Acción Rápida (Top Right) */}
-          <div className="flex flex-wrap gap-3">
+          {/* Botones de Acción Rápida */}
+          <div className="flex flex-wrap gap-4">
             <Link 
               to="/notifications" 
-              className="flex items-center gap-2 rounded-md border-2 border-black bg-[#FFDE00] px-4 py-2 font-bold text-black shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg active:translate-y-0 active:shadow-none"
+              className="btn-neo bg-[#FFDE00] hover:bg-[#FFE55C]"
             >
-              🔔 <span className="hidden sm:inline">Notificaciones</span>
+              <Bell strokeWidth={3} className="w-5 h-5" />
+              <span className="hidden sm:inline">Alertas</span>
             </Link>
 
             <Link 
               to="/chat" 
-              className="flex items-center gap-2 rounded-md border-2 border-black bg-[#FF90E8] px-4 py-2 font-bold text-black shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg active:translate-y-0 active:shadow-none"
+              className="btn-neo bg-[#FF90E8] hover:bg-[#FFAFF0]"
             >
-              💬 <span className="hidden sm:inline">Mensajes</span>
+              <MessageSquare strokeWidth={3} className="w-5 h-5" />
+              <span className="hidden sm:inline">Chat</span>
             </Link>
 
-            {/* Botón Admin (Solo si es admin) */}
             {isAdmin && (
               <Link 
                 to="/admin" 
-                className="flex items-center gap-2 rounded-md border-2 border-black bg-[#7e22ce] px-4 py-2 font-bold text-white shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg active:translate-y-0 active:shadow-none"
+                className="btn-neo bg-[#7e22ce] text-white hover:bg-[#9642e0]"
               >
-                🛡️ <span className="hidden sm:inline">Admin Panel</span>
+                <ShieldAlert strokeWidth={3} className="w-5 h-5" />
+                <span className="hidden sm:inline">Admin</span>
               </Link>
             )}
           </div>
         </div>
 
-        {/* --- GRID DE NAVEGACIÓN PRINCIPAL --- */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* --- GRID DE NAVEGACIÓN --- */}
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           
           {/* TARJETA 1: CATÁLOGO */}
           <Link 
             to="/tools" 
-            className="group relative overflow-hidden rounded-xl border-2 border-black bg-[#23A0FF] p-8 shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg"
+            className="group relative overflow-hidden bg-[#23A0FF] p-10 card-neo hover:bg-[#40AFFF]"
           >
-            <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-black bg-white text-4xl shadow-sm">
-                🛠️
+            <div className="relative z-10 flex flex-col items-start h-full justify-between gap-8">
+              <div className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-neo-sm group-hover:rotate-12 transition-transform">
+                <Wrench strokeWidth={3} className="w-8 h-8 text-black" />
               </div>
-              <h2 className="mb-1 text-2xl font-black uppercase text-white drop-shadow-[2px_2px_0_rgba(0,0,0,1)]">
-                Catálogo
-              </h2>
-              <p className="font-bold text-white opacity-90">
-                Explora, compra o pide prestado.
-              </p>
+              <div>
+                <h2 className="text-3xl font-black uppercase text-white drop-shadow-[3px_3px_0_rgba(0,0,0,1)] mb-2">
+                  Catálogo
+                </h2>
+                <p className="font-bold text-black bg-white/90 px-2 py-1 inline-block text-sm border-2 border-black">
+                  EXPLORAR HERRAMIENTAS
+                </p>
+              </div>
             </div>
-            {/* Elemento decorativo de fondo */}
-            <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full border-2 border-black bg-white opacity-20 transition-transform group-hover:scale-150"></div>
+            {/* Patrón de fondo */}
+            <div className="absolute right-[-20px] top-[-20px] w-32 h-32 bg-white/20 rounded-full border-4 border-black opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </Link>
 
           {/* TARJETA 2: MIS PRÉSTAMOS */}
           <Link 
             to="/my-loans" 
-            className="group relative overflow-hidden rounded-xl border-2 border-black bg-[#00F0FF] p-8 shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg"
+            className="group relative overflow-hidden bg-[#00F0FF] p-10 card-neo hover:bg-[#4CFFFF]"
           >
-            <div className="relative z-10 flex flex-col items-center text-center">
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-black bg-white text-4xl shadow-sm">
-                🤝
+            <div className="relative z-10 flex flex-col items-start h-full justify-between gap-8">
+              <div className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-neo-sm group-hover:-rotate-12 transition-transform">
+                <Handshake strokeWidth={3} className="w-8 h-8 text-black" />
               </div>
-              <h2 className="mb-1 text-2xl font-black uppercase text-black">
-                Mis Préstamos
-              </h2>
-              <p className="font-bold text-gray-800">
-                Tus solicitudes enviadas y recibidas.
-              </p>
+              <div>
+                <h2 className="text-3xl font-black uppercase text-black mb-2">
+                  Préstamos
+                </h2>
+                <p className="font-bold text-white bg-black px-2 py-1 inline-block text-sm">
+                  GESTIONAR SOLICITUDES
+                </p>
+              </div>
             </div>
           </Link>
 
@@ -101,45 +122,58 @@ export default function Dashboard() {
           {user && (
             <Link 
               to={`/user/${user.userId}`} 
-              className="group relative overflow-hidden rounded-xl border-2 border-black bg-[#FFDE00] p-8 shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg"
+              className="group relative overflow-hidden bg-[#FFDE00] p-10 card-neo hover:bg-[#FFE55C]"
             >
-              <div className="relative z-10 flex flex-col items-center text-center">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-black bg-white text-4xl shadow-sm">
-                  👤
+              <div className="relative z-10 flex flex-col items-start h-full justify-between gap-8">
+                <div className="w-16 h-16 bg-white border-4 border-black flex items-center justify-center shadow-neo-sm group-hover:scale-110 transition-transform">
+                  <User strokeWidth={3} className="w-8 h-8 text-black" />
                 </div>
-                <h2 className="mb-1 text-2xl font-black uppercase text-black">
-                  Mi Perfil
-                </h2>
-                <p className="font-bold text-gray-800">
-                  Tu reputación y herramientas.
-                </p>
+                <div>
+                  <h2 className="text-3xl font-black uppercase text-black mb-2">
+                    Mi Perfil
+                  </h2>
+                  <p className="font-bold text-black border-b-4 border-black inline-block text-sm pb-1">
+                    VER REPUTACIÓN
+                  </p>
+                </div>
               </div>
             </Link>
           )}
 
-          {/* TARJETA 4: HISTORIAL / NO DISPONIBLES (Ocupa ancho completo en móviles, o una celda en grid grande) */}
+          {/* TARJETA 4: HISTORIAL (Ancho completo) */}
           <Link 
             to="/unavailable" 
-            className="group relative flex flex-col items-center justify-center rounded-xl border-2 border-black bg-white p-8 text-center shadow-neo transition-all hover:-translate-y-1 hover:shadow-neo-lg sm:col-span-2 lg:col-span-3"
+            className="sm:col-span-2 lg:col-span-3 card-neo bg-white p-8 flex flex-col md:flex-row items-center justify-between gap-6 group hover:bg-gray-50"
           >
-            <div className="mb-2 text-4xl transition-transform group-hover:scale-110">🚫</div>
-            <h2 className="text-xl font-black uppercase text-gray-800">
-              Historial / No Disponibles
-            </h2>
-            <p className="text-sm font-bold text-gray-500">
-              Consulta herramientas que ya han sido vendidas o están prestadas actualmente.
-            </p>
+            <div className="flex items-center gap-6">
+              <div className="bg-gray-200 p-4 border-4 border-black shadow-neo-sm group-hover:bg-gray-300 transition-colors">
+                <History strokeWidth={3} className="w-10 h-10 text-gray-700" />
+              </div>
+              <div className="text-left">
+                <h2 className="text-2xl font-black uppercase text-gray-800">
+                  Historial / No Disponibles
+                </h2>
+                <p className="font-bold text-gray-500 text-sm mt-1">
+                  CONSULTA EL REGISTRO DE ITEMS VENDIDOS O PRESTADOS
+                </p>
+              </div>
+            </div>
+            
+            <div className="bg-black text-white px-6 py-2 font-black uppercase text-sm border-2 border-transparent group-hover:border-black group-hover:bg-transparent group-hover:text-black transition-all">
+              Ver Historial &rarr;
+            </div>
           </Link>
 
         </div>
 
         {/* --- LOGOUT --- */}
-        <div className="mt-12 text-center">
+        <div className="mt-16 text-center">
           <button 
             onClick={handleLogout} 
-            className="inline-block rounded-lg border-2 border-black bg-red-500 px-8 py-3 font-black uppercase text-white shadow-neo transition-all hover:bg-red-600 hover:shadow-neo-lg active:translate-y-1 active:shadow-none"
+            className="btn-neo bg-[#FF4545] text-white hover:bg-[#FF6B6B] w-full md:w-auto"
           >
-            Cerrar Sesión
+            <LogOut strokeWidth={3} className="w-5 h-5" />
+            CERRAR SESIÓN
           </button>
         </div>
 
