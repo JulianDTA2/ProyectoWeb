@@ -3,16 +3,17 @@ import { useTools, type Tool } from '../context/ToolsContext';
 import { useAuth } from '../context/AuthContext';
 import { useLoans } from '../context/LoansContext';
 import { Link, useNavigate } from 'react-router-dom';
-// ICONOS LUCIDE (Estilo Industrial)
+// ICONOS LUCIDE (Limpios)
 import { 
   Search, Filter, Plus, Wrench, ArrowLeft, Tag, Calendar, 
-  DollarSign, X, AlertCircle, CheckCircle2, ShoppingBag, 
+  DollarSign, X, AlertCircle, ShoppingBag, 
   Megaphone, PackageOpen, User 
 } from 'lucide-react';
 
 export default function ToolsPage() {
-  // --- LÓGICA ORIGINAL (INTACTA) ---
-  const { tools, fetchTools, addTool, loading, error: toolsError, successMessage } = useTools();
+  // --- LÓGICA ORIGINAL ---
+  // CORRECCIÓN AQUÍ: Quitamos 'successMessage' que no se usaba
+  const { tools, fetchTools, addTool, loading, error: toolsError } = useTools();
   const { user } = useAuth();
   const { createLoan } = useLoans();
   const navigate = useNavigate();
@@ -37,12 +38,10 @@ export default function ToolsPage() {
   const [loanDates, setLoanDates] = useState({ startDate: '', endDate: '' });
   const [isRequesting, setIsRequesting] = useState(false);
 
-  // Cargar herramientas al montar
   useEffect(() => {
     fetchTools();
   }, []);
 
-  // Filtrado
   const filteredTools = useMemo(() => {
     return tools.filter((tool) => {
       const query = searchQuery.toLowerCase();
@@ -136,9 +135,8 @@ export default function ToolsPage() {
             </div>
         </div>
 
-        {/* --- FORMULARIO "CAJA DE HERRAMIENTAS" --- */}
+        {/* --- FORMULARIO --- */}
         <div className="mb-12 border-4 border-black bg-[#FFDE00] p-6 md:p-8 shadow-neo relative group transition-all hover:shadow-neo-hover">
-            {/* Etiqueta Flotante */}
             <div className="absolute -top-4 left-4 sm:left-8 bg-black text-white px-4 py-1 font-black uppercase text-sm transform -rotate-1 group-hover:rotate-0 transition-transform z-10 flex items-center gap-2">
                 <Megaphone strokeWidth={3} className="w-4 h-4" />
                 Nueva Publicación
@@ -211,7 +209,7 @@ export default function ToolsPage() {
             </form>
         </div>
 
-        {/* --- BARRA DE CONTROL (BUSCAR + FILTROS) --- */}
+        {/* --- BARRA DE CONTROL --- */}
         <div className="sticky top-4 z-30 mb-8 bg-[#F0F0E0]/95 backdrop-blur-md p-2 border-b-4 border-black md:border-none">
             <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-1">
@@ -257,7 +255,6 @@ export default function ToolsPage() {
                   
                   {/* CUERPO DE TARJETA */}
                   <div className="p-6 relative flex-1">
-                    {/* Sticker Tipo */}
                     <div className={`absolute -top-4 -right-4 border-4 border-black px-3 py-1 font-black text-xs uppercase shadow-sm transform group-hover:rotate-6 transition-transform z-10
                         ${tool.type === 'sale' ? 'bg-[#00F0FF]' : 'bg-[#FF90E8]'}`}>
                         {tool.type === 'sale' ? `VENTA $${tool.price}` : 'PRÉSTAMO'}
@@ -282,7 +279,7 @@ export default function ToolsPage() {
                     </p>
                   </div>
 
-                  {/* FOOTER / ACCIONES */}
+                  {/* FOOTER */}
                   <div className="p-4 bg-gray-50 border-t-4 border-black flex flex-col gap-3">
                     <div className="flex justify-between items-center text-xs font-black uppercase text-gray-500">
                          <span className="flex items-center gap-1"><User className="w-3 h-3" /> Dueño: {tool.owner?.name || 'DESCONOCIDO'}</span>
@@ -313,7 +310,7 @@ export default function ToolsPage() {
         </div>
       </div>
 
-      {/* --- MODAL AGRESIVO --- */}
+      {/* --- MODAL --- */}
       {showModal && selectedTool && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-in fade-in zoom-in duration-200">
           <div className="w-full max-w-lg bg-white border-4 border-black shadow-[10px_10px_0px_0px_#ffffff] p-8 relative">

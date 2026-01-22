@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios'; 
-// ICONOS LUCIDE (Estilo Industrial)
+// ICONOS LUCIDE (Limpios)
 import { 
-  ArrowLeft, Archive, AlertTriangle, User, 
+  ArrowLeft, Archive, User, 
   Ban, CheckCircle2, History 
 } from 'lucide-react';
 
@@ -50,7 +50,7 @@ export default function UnavailableToolsPage() {
         {/* CONTENEDOR PRINCIPAL */}
         <div className="border-4 border-black bg-white p-6 md:p-8 shadow-neo">
            
-           {/* Barra de Estado / Leyenda */}
+           {/* Barra de Estado */}
            <div className="mb-8 flex flex-wrap gap-4 border-b-4 border-black pb-4">
                 <div className="flex items-center gap-2 text-xs font-black uppercase">
                     <div className="h-3 w-3 border-2 border-black bg-[#FF4545]"></div> Vendido
@@ -60,7 +60,7 @@ export default function UnavailableToolsPage() {
                 </div>
            </div>
 
-           {/* GRID DE RESULTADOS */}
+           {/* GRID */}
            {loading ? (
              <div className="flex flex-col items-center justify-center py-20 opacity-50">
                  <History className="animate-spin w-12 h-12 mb-4" strokeWidth={2} />
@@ -77,7 +77,7 @@ export default function UnavailableToolsPage() {
                 {tools.map(tool => (
                   <div key={tool.id} className="relative group overflow-hidden border-4 border-black bg-gray-100 p-6 transition-all hover:bg-white hover:shadow-neo">
                     
-                    {/* CINTA DE "AGOTADO" O "OCUPADO" */}
+                    {/* CINTA */}
                     <div className={`absolute -right-12 top-6 w-48 rotate-45 border-y-2 border-black py-1 text-center text-[10px] font-black uppercase tracking-widest text-black shadow-sm z-10
                         ${tool.type === 'sale' ? 'bg-[#FF4545]' : 'bg-[#FF90E8]'}`}>
                         {tool.type === 'sale' ? 'VENDIDO' : 'PRESTADO'}
@@ -103,7 +103,7 @@ export default function UnavailableToolsPage() {
                         </div>
                     </div>
 
-                    {/* Patrón de "Rayado" de fondo para dar efecto industrial */}
+                    {/* Patrón de fondo */}
                     <div className="absolute inset-0 pointer-events-none opacity-5 bg-[repeating-linear-gradient(45deg,#000,#000_10px,transparent_10px,transparent_20px)]"></div>
                   </div>
                 ))}

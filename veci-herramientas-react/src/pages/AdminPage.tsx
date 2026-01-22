@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
-// ICONOS LUCIDE (Estilo Industrial)
+// ICONOS LUCIDE (Limpios)
 import { 
-  ShieldAlert, Check, X, ArrowLeft, Package, 
-  User, Loader2, FileCheck, AlertOctagon 
+  ShieldAlert, Check, X, ArrowLeft, 
+  Loader2, FileCheck 
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -123,7 +123,7 @@ export default function AdminPage() {
                       </p>
                       
                       <div className="flex items-center gap-2 text-xs font-black uppercase text-gray-500">
-                        <User className="h-4 w-4" /> 
+                        <div className="h-4 w-4 bg-black rounded-full"></div>
                         Propietario: <span className="bg-black text-white px-1">{tool.owner?.name || 'Desconocido'}</span>
                       </div>
                     </div>
